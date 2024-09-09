@@ -1,5 +1,7 @@
 Zine.py is a rudimentary 'zine layout tool.
 
+version 0.1
+
 Installation
 ------------
 Copy zine.py and optionally scissors.png into the directory with 8 png files you want to be the 'zine.
@@ -29,3 +31,9 @@ page8.png
 If that runs successfully, there should be a file called 'zine_layout.pdf' created.
 
 At that point, fold on the dotted lines, cut on the dashed, and turn into a 'zine!
+
+Warnings
+--------
+- No error checking is done!  
+- The aspect ratio of the PNGs are neither checked nor manipulated.
+- Not designed to be copied to a central place and used from there.
