@@ -3,6 +3,9 @@
 from PIL import Image, ImageDraw
 import sys
 import re
+import os
+import tkinter as tk
+from tkinter import messagebox
 
 # Function to sort filenames with numbers
 def sort_files_from_args(files):
@@ -20,13 +23,16 @@ def sort_files_from_args(files):
     # Sort the files based on the extracted number
     sorted_files = sorted(files, key=extract_number)
     
-    # Print or return the sorted file list
+    # Print the sorted file list
     print("Sorted files:")
     for file in sorted_files:
         print(file)
     
-    # Return sorted file list if needed
-    return sorted_files
+    # Extract the path from the first file (assuming all files are in the same directory)
+    output_path = os.path.dirname(sorted_files[0]) if sorted_files else ''
+    
+    # Return sorted file list and the output path
+    return sorted_files, output_path
 
 # Function to rotate images
 def rotate_image(image, degrees):
@@ -49,11 +55,15 @@ def draw_dashed_line(draw, start_pos, end_pos, dash_length=15, gap_length=10, li
 
 # Load PNG files (adjust filenames if needed)
 
-if len(sys.argv) < 2:
-    print("Usage: zine.py <file1> <file2> ...")
+if len(sys.argv) < 9:  # We need at least 8 files plus the script name
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    messagebox.showerror("Error", "Not enough files provided. Please provide at least 8 image files.")
+    print("Usage: zine.py <file1> <file2> ... <file8>")
+    sys.exit(1)
 else:
     # Pass all arguments except the script name
-    png_files = sort_files_from_args(sys.argv[1:])
+    png_files, output_path = sort_files_from_args(sys.argv[1:])
 
 # Load scissors image
 has_scissors = True
@@ -123,4 +133,4 @@ if (has_scissors):
     zine_canvas.paste(scissors_resized, (image_width * 3 - 25, image_height - 15), scissors_resized)
 
 # Save the zine layout as a PDF with the new features
-zine_canvas.save('zine_layout.pdf', 'PDF')
+zine_canvas.save(os.path.join(output_path, 'zine_layout.pdf'), 'PDF')
